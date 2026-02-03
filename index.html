@@ -1,0 +1,2957 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>CyberMorse Việt - Học Mã Morse Tiếng Việt trong Thế giới Cyberpunk</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Exo+2:wght@300;400;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --neon-blue: #00f3ff;
+            --neon-pink: #ff00ff;
+            --neon-purple: #9d00ff;
+            --neon-green: #00ff9d;
+            --neon-yellow: #ffff00;
+            --neon-red: #ff3333;
+            --neon-orange: #ff9900;
+            
+            --dark-bg: #0a0a14;
+            --darker-bg: #05050a;
+            --panel-bg: rgba(10, 15, 30, 0.85);
+            --panel-border: rgba(0, 243, 255, 0.3);
+            --text-primary: #e0e0ff;
+            --text-secondary: #a0a0d0;
+            --text-dim: #7070a0;
+            
+            --glow-blue: 0 0 10px rgba(0, 243, 255, 0.7), 0 0 20px rgba(0, 243, 255, 0.5), 0 0 30px rgba(0, 243, 255, 0.3);
+            --glow-pink: 0 0 10px rgba(255, 0, 255, 0.7), 0 0 20px rgba(255, 0, 255, 0.5), 0 0 30px rgba(255, 0, 255, 0.3);
+            --glow-green: 0 0 10px rgba(0, 255, 157, 0.7), 0 0 20px rgba(0, 255, 157, 0.5), 0 0 30px rgba(0, 255, 157, 0.3);
+            
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            font-size: 16px;
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'Exo 2', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(0, 243, 255, 0.05) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(255, 0, 255, 0.05) 0%, transparent 20%),
+                linear-gradient(to bottom, var(--darker-bg), var(--dark-bg));
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .cyber-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 243, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 243, 255, 0.05) 1px, transparent 1px);
+            background-size: 30px 30px;
+            pointer-events: none;
+            z-index: -1;
+            animation: gridMove 20s linear infinite;
+        }
+        
+        @keyframes gridMove {
+            0% { background-position: 0 0; }
+            100% { background-position: 30px 30px; }
+        }
+        
+        .scan-line {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(to right, transparent, var(--neon-blue), transparent);
+            box-shadow: 0 0 10px var(--neon-blue);
+            animation: scan 4s linear infinite;
+            pointer-events: none;
+            z-index: 999;
+        }
+        
+        @keyframes scan {
+            0% { top: 0%; }
+            100% { top: 100%; }
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        /* Header Cyberpunk */
+        header {
+            background: rgba(5, 5, 10, 0.9);
+            border-bottom: 1px solid var(--panel-border);
+            padding: 1.5rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 30px rgba(0, 243, 255, 0.2);
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .logo-icon {
+            position: relative;
+            width: 3.5rem;
+            height: 3.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 243, 255, 0.1);
+            border-radius: 50%;
+            border: 1px solid var(--neon-blue);
+            box-shadow: var(--glow-blue);
+            animation: pulse 2s infinite alternate;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: var(--glow-blue); }
+            100% { box-shadow: 0 0 20px rgba(0, 243, 255, 0.9), 0 0 40px rgba(0, 243, 255, 0.6); }
+        }
+        
+        .logo-icon i {
+            font-size: 1.8rem;
+            color: var(--neon-blue);
+        }
+        
+        .logo-text h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            font-weight: 900;
+            background: linear-gradient(to right, var(--neon-blue), var(--neon-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
+            letter-spacing: 1px;
+        }
+        
+        .logo-text p {
+            font-size: 0.8rem;
+            color: var(--neon-blue);
+            font-family: 'Share Tech Mono', monospace;
+            letter-spacing: 2px;
+        }
+        
+        /* Navigation Cyberpunk */
+        .nav-container {
+            display: flex;
+            gap: 0.5rem;
+            background: rgba(0, 10, 20, 0.8);
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            border: 1px solid var(--panel-border);
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
+        }
+        
+        .nav-tab {
+            padding: 0.8rem 1.5rem;
+            border-radius: 0.25rem;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 500;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            white-space: nowrap;
+            color: var(--text-secondary);
+            border: none;
+            background: transparent;
+            position: relative;
+            overflow: hidden;
+            letter-spacing: 1px;
+        }
+        
+        .nav-tab:hover {
+            color: var(--neon-blue);
+            background: rgba(0, 243, 255, 0.1);
+        }
+        
+        .nav-tab.active {
+            background: rgba(0, 243, 255, 0.15);
+            color: var(--neon-blue);
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
+        }
+        
+        .nav-tab.active::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--neon-blue);
+            box-shadow: 0 0 10px var(--neon-blue);
+        }
+        
+        .nav-tab i {
+            font-size: 1rem;
+        }
+        
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--neon-blue);
+            font-size: 1.8rem;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+        
+        /* Main content */
+        main {
+            padding: 2.5rem 0;
+            min-height: calc(100vh - 200px);
+        }
+        
+        .content-section {
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        .content-section.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Section header Cyberpunk */
+        .section-header {
+            margin-bottom: 2.5rem;
+            position: relative;
+            padding-left: 1rem;
+        }
+        
+        .section-header::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: linear-gradient(to bottom, var(--neon-blue), var(--neon-pink));
+            border-radius: 2px;
+            box-shadow: var(--glow-blue);
+        }
+        
+        .section-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
+            letter-spacing: 1px;
+        }
+        
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            line-height: 1.7;
+        }
+        
+        /* Cyberpunk Cards */
+        .cyber-card {
+            background: var(--panel-bg);
+            border-radius: 0.5rem;
+            border: 1px solid var(--panel-border);
+            padding: 2rem;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 2rem;
+            box-shadow: 0 0 20px rgba(0, 10, 30, 0.7);
+        }
+        
+        .cyber-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(to right, var(--neon-blue), var(--neon-pink));
+        }
+        
+        .cyber-card:hover {
+            box-shadow: 0 0 30px rgba(0, 243, 255, 0.3);
+            transform: translateY(-5px);
+            border-color: var(--neon-blue);
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .card-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--neon-blue);
+            text-shadow: 0 0 5px rgba(0, 243, 255, 0.5);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        /* Category tabs for morse chart */
+        .category-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .category-tab {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.25rem;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 500;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: var(--transition);
+            background: rgba(0, 10, 20, 0.8);
+            color: var(--text-secondary);
+            border: 1px solid var(--panel-border);
+            position: relative;
+            overflow: hidden;
+            letter-spacing: 1px;
+        }
+        
+        .category-tab:hover {
+            color: var(--neon-blue);
+            border-color: var(--neon-blue);
+        }
+        
+        .category-tab.active {
+            background: rgba(0, 243, 255, 0.15);
+            color: var(--neon-blue);
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
+        }
+        
+        /* Morse chart Cyberpunk */
+        .morse-chart-container {
+            display: none;
+        }
+        
+        .morse-chart-container.active {
+            display: block;
+        }
+        
+        .morse-chart {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 2rem;
+        }
+        
+        .morse-card {
+            background: rgba(0, 15, 30, 0.7);
+            border-radius: 0.5rem;
+            padding: 1.5rem 1rem;
+            text-align: center;
+            border: 1px solid rgba(0, 243, 255, 0.2);
+            transition: var(--transition);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .morse-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--neon-blue);
+            box-shadow: var(--glow-blue);
+        }
+        
+        .morse-card.learned::after {
+            content: '✓';
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            color: var(--neon-green);
+            font-size: 0.9rem;
+            font-weight: bold;
+            text-shadow: 0 0 5px var(--neon-green);
+        }
+        
+        .morse-char {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--neon-blue);
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 10px rgba(0, 243, 255, 0.7);
+        }
+        
+        .morse-code {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 1.5rem;
+            color: var(--neon-pink);
+            letter-spacing: 0.25rem;
+            margin-bottom: 0.75rem;
+            font-weight: 500;
+        }
+        
+        /* Cyberpunk Buttons */
+        .cyber-btn {
+            padding: 0.8rem 1.8rem;
+            border-radius: 0.25rem;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 500;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            border: none;
+            line-height: 1;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cyber-btn:focus {
+            outline: 2px solid var(--neon-blue);
+            outline-offset: 2px;
+        }
+        
+        .cyber-btn-primary {
+            background: rgba(0, 243, 255, 0.1);
+            color: var(--neon-blue);
+            border: 1px solid var(--neon-blue);
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.3);
+        }
+        
+        .cyber-btn-primary:hover {
+            background: rgba(0, 243, 255, 0.2);
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.6);
+            transform: translateY(-2px);
+        }
+        
+        .cyber-btn-success {
+            background: rgba(0, 255, 157, 0.1);
+            color: var(--neon-green);
+            border: 1px solid var(--neon-green);
+            box-shadow: 0 0 10px rgba(0, 255, 157, 0.3);
+        }
+        
+        .cyber-btn-success:hover {
+            background: rgba(0, 255, 157, 0.2);
+            box-shadow: 0 0 20px rgba(0, 255, 157, 0.6);
+            transform: translateY(-2px);
+        }
+        
+        .cyber-btn-warning {
+            background: rgba(255, 255, 0, 0.1);
+            color: var(--neon-yellow);
+            border: 1px solid var(--neon-yellow);
+            box-shadow: 0 0 10px rgba(255, 255, 0, 0.3);
+        }
+        
+        .cyber-btn-warning:hover {
+            background: rgba(255, 255, 0, 0.2);
+            box-shadow: 0 0 20px rgba(255, 255, 0, 0.6);
+            transform: translateY(-2px);
+        }
+        
+        .cyber-btn-outline {
+            background: transparent;
+            color: var(--neon-blue);
+            border: 1px solid var(--neon-blue);
+        }
+        
+        .cyber-btn-outline:hover {
+            background: rgba(0, 243, 255, 0.1);
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.4);
+        }
+        
+        .cyber-btn-icon {
+            width: 3rem;
+            height: 3rem;
+            padding: 0;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Cyberpunk Input Fields */
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .input-label {
+            display: block;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--neon-blue);
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 5px rgba(0, 243, 255, 0.5);
+            letter-spacing: 1px;
+        }
+        
+        .cyber-input {
+            width: 100%;
+            padding: 1rem 1.25rem;
+            border-radius: 0.25rem;
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            font-size: 1.1rem;
+            font-family: 'Exo 2', sans-serif;
+            transition: var(--transition);
+            background: rgba(0, 15, 30, 0.7);
+            color: var(--text-primary);
+            letter-spacing: 1px;
+        }
+        
+        .cyber-input:focus {
+            outline: none;
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.5);
+        }
+        
+        .cyber-input::placeholder {
+            color: var(--text-dim);
+        }
+        
+        /* Text to Morse Converter */
+        .converter-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        @media (max-width: 1024px) {
+            .converter-container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .converter-box {
+            background: rgba(0, 15, 30, 0.7);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            border: 1px solid rgba(0, 243, 255, 0.2);
+        }
+        
+        .converter-box h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3rem;
+            color: var(--neon-blue);
+            margin-bottom: 1rem;
+            text-shadow: 0 0 5px rgba(0, 243, 255, 0.5);
+        }
+        
+        .converter-output {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 1.2rem;
+            color: var(--neon-pink);
+            line-height: 1.8;
+            min-height: 150px;
+            padding: 1rem;
+            background: rgba(0, 5, 15, 0.8);
+            border-radius: 0.25rem;
+            border: 1px solid rgba(157, 0, 255, 0.3);
+            overflow-wrap: break-word;
+        }
+        
+        /* Practice area Cyberpunk */
+        .practice-area {
+            text-align: center;
+            padding: 2.5rem;
+            background: rgba(0, 15, 30, 0.7);
+            border-radius: 0.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(0, 243, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .practice-area::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(0, 243, 255, 0.05), transparent);
+            z-index: 0;
+        }
+        
+        .morse-display {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 2.8rem;
+            letter-spacing: 0.5rem;
+            margin: 2rem 0;
+            min-height: 5rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--neon-pink);
+            background: rgba(0, 5, 15, 0.8);
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            border: 1px solid rgba(255, 0, 255, 0.3);
+            box-shadow: 0 0 20px rgba(255, 0, 255, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Sound visualizer Cyberpunk */
+        .sound-visualizer {
+            height: 4rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 1.5rem 0;
+            gap: 0.5rem;
+        }
+        
+        .sound-bar {
+            width: 0.5rem;
+            height: 1rem;
+            background: linear-gradient(to top, var(--neon-blue), var(--neon-pink));
+            border-radius: 1rem;
+            animation: soundWave 0.8s infinite ease-in-out;
+            box-shadow: 0 0 5px var(--neon-blue);
+        }
+        
+        @keyframes soundWave {
+            0%, 100% { height: 1rem; }
+            50% { height: 3.5rem; }
+        }
+        
+        /* Difficulty selector Cyberpunk */
+        .difficulty-selector {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            margin-top: 1.5rem;
+            justify-content: center;
+        }
+        
+        .difficulty-btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.25rem;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            background: rgba(0, 15, 30, 0.7);
+            color: var(--text-secondary);
+            letter-spacing: 1px;
+        }
+        
+        .difficulty-btn:hover {
+            color: var(--neon-blue);
+            border-color: var(--neon-blue);
+        }
+        
+        .difficulty-btn.active {
+            background: rgba(0, 243, 255, 0.15);
+            color: var(--neon-blue);
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
+        }
+        
+        /* AI Chat Cyberpunk */
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            height: 500px;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            background: rgba(0, 15, 30, 0.7);
+        }
+        
+        .chat-header {
+            padding: 1.2rem 1.5rem;
+            background: rgba(0, 10, 20, 0.9);
+            color: var(--neon-blue);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border-bottom: 1px solid rgba(0, 243, 255, 0.3);
+        }
+        
+        .chat-header i {
+            font-size: 1.5rem;
+            color: var(--neon-blue);
+            text-shadow: 0 0 5px rgba(0, 243, 255, 0.7);
+        }
+        
+        .chat-header span {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            padding: 1.5rem;
+            overflow-y: auto;
+            background: rgba(0, 5, 15, 0.8);
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+        
+        .message {
+            max-width: 85%;
+            padding: 1rem 1.5rem;
+            border-radius: 0.5rem;
+            line-height: 1.6;
+            animation: messageAppear 0.3s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        @keyframes messageAppear {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .user-message {
+            background: linear-gradient(135deg, rgba(0, 243, 255, 0.2), rgba(157, 0, 255, 0.2));
+            color: var(--text-primary);
+            align-self: flex-end;
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            border-bottom-right-radius: 0;
+        }
+        
+        .ai-message {
+            background: linear-gradient(135deg, rgba(255, 0, 255, 0.1), rgba(0, 10, 30, 0.8));
+            color: var(--text-primary);
+            align-self: flex-start;
+            border: 1px solid rgba(255, 0, 255, 0.3);
+            border-bottom-left-radius: 0;
+        }
+        
+        .chat-input-container {
+            display: flex;
+            padding: 1.2rem;
+            background: rgba(0, 10, 20, 0.9);
+            border-top: 1px solid rgba(0, 243, 255, 0.3);
+            gap: 0.75rem;
+        }
+        
+        .chat-input {
+            flex: 1;
+            padding: 0.9rem 1.2rem;
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            border-radius: 0.25rem;
+            font-size: 1rem;
+            font-family: 'Exo 2', sans-serif;
+            transition: var(--transition);
+            background: rgba(0, 15, 30, 0.7);
+            color: var(--text-primary);
+        }
+        
+        .chat-input:focus {
+            outline: none;
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
+        }
+        
+        .predefined-questions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+        }
+        
+        .question-chip {
+            padding: 0.75rem 1.2rem;
+            background: rgba(0, 243, 255, 0.1);
+            color: var(--neon-blue);
+            border-radius: 2rem;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            font-family: 'Exo 2', sans-serif;
+        }
+        
+        .question-chip:hover {
+            background: rgba(0, 243, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
+        }
+        
+        /* Progress section Cyberpunk */
+        .progress-container {
+            background: rgba(0, 15, 30, 0.7);
+            border-radius: 0.5rem;
+            padding: 2.5rem;
+            border: 1px solid rgba(0, 243, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .progress-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(to right, var(--neon-blue), var(--neon-pink), var(--neon-green));
+        }
+        
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .progress-bar {
+            height: 1rem;
+            background-color: rgba(0, 10, 20, 0.8);
+            border-radius: 1rem;
+            margin: 2rem 0;
+            overflow: hidden;
+            border: 1px solid rgba(0, 243, 255, 0.3);
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(to right, var(--neon-blue), var(--neon-pink));
+            border-radius: 1rem;
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(255, 255, 255, 0.3) 50%, 
+                transparent 100%);
+            animation: progressShine 2s infinite linear;
+        }
+        
+        @keyframes progressShine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2.5rem;
+        }
+        
+        .stat-card {
+            background: rgba(0, 10, 20, 0.8);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            text-align: center;
+            border: 1px solid rgba(0, 243, 255, 0.2);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
+        }
+        
+        .stat-value {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--neon-blue);
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 10px rgba(0, 243, 255, 0.7);
+        }
+        
+        .stat-label {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+            letter-spacing: 1px;
+        }
+        
+        /* Footer Cyberpunk */
+        footer {
+            background: rgba(5, 5, 10, 0.95);
+            color: var(--text-primary);
+            padding: 3rem 0 2rem;
+            margin-top: 3rem;
+            border-top: 1px solid var(--panel-border);
+        }
+        
+        .footer-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-section h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--neon-blue);
+            text-shadow: 0 0 5px rgba(0, 243, 255, 0.5);
+        }
+        
+        .footer-section p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.75rem;
+        }
+        
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .footer-links a:hover {
+            color: var(--neon-blue);
+            transform: translateX(5px);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(0, 243, 255, 0.2);
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            font-family: 'Share Tech Mono', monospace;
+            letter-spacing: 1px;
+        }
+        
+        /* Utility classes */
+        .text-center { text-align: center; }
+        .text-right { text-align: right; }
+        .mt-1 { margin-top: 0.5rem; }
+        .mt-2 { margin-top: 1rem; }
+        .mt-3 { margin-top: 1.5rem; }
+        .mt-4 { margin-top: 2rem; }
+        .mb-1 { margin-bottom: 0.5rem; }
+        .mb-2 { margin-bottom: 1rem; }
+        .mb-3 { margin-bottom: 1.5rem; }
+        .mb-4 { margin-bottom: 2rem; }
+        .flex { display: flex; }
+        .flex-col { flex-direction: column; }
+        .items-center { align-items: center; }
+        .justify-between { justify-content: space-between; }
+        .justify-center { justify-content: center; }
+        .gap-2 { gap: 1rem; }
+        .gap-3 { gap: 1.5rem; }
+        .w-full { width: 100%; }
+        
+        /* Feedback messages Cyberpunk */
+        .feedback {
+            padding: 1rem 1.5rem;
+            border-radius: 0.25rem;
+            font-weight: 500;
+            margin-top: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            animation: feedbackAppear 0.3s ease-out;
+            border: 1px solid;
+            font-family: 'Exo 2', sans-serif;
+        }
+        
+        @keyframes feedbackAppear {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .feedback-success {
+            background-color: rgba(0, 255, 157, 0.1);
+            color: var(--neon-green);
+            border-color: rgba(0, 255, 157, 0.3);
+        }
+        
+        .feedback-error {
+            background-color: rgba(255, 50, 50, 0.1);
+            color: #ff5050;
+            border-color: rgba(255, 50, 50, 0.3);
+        }
+        
+        .feedback-info {
+            background-color: rgba(0, 243, 255, 0.1);
+            color: var(--neon-blue);
+            border-color: rgba(0, 243, 255, 0.3);
+        }
+        
+        /* Vietnamese character highlight */
+        .vietnamese-char {
+            color: var(--neon-orange);
+            text-shadow: 0 0 10px rgba(255, 153, 0, 0.7);
+        }
+        
+        /* Special note for Vietnamese */
+        .vietnamese-note {
+            background: rgba(255, 153, 0, 0.1);
+            border-left: 4px solid var(--neon-orange);
+            padding: 1rem;
+            margin: 1.5rem 0;
+            border-radius: 0.25rem;
+            font-size: 0.95rem;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .morse-chart {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header-container {
+                flex-wrap: wrap;
+            }
+            
+            .nav-container {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: rgba(5, 5, 10, 0.98);
+                padding: 1rem;
+                border-radius: 0 0 0.5rem 0.5rem;
+                flex-direction: column;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+                z-index: 99;
+                border: 1px solid var(--panel-border);
+                border-top: none;
+            }
+            
+            .nav-container.active {
+                display: flex;
+            }
+            
+            .mobile-menu-toggle {
+                display: block;
+            }
+            
+            .morse-display {
+                font-size: 2rem;
+                letter-spacing: 0.3rem;
+            }
+            
+            .footer-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .chat-container {
+                height: 450px;
+            }
+            
+            .converter-container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 1rem;
+            }
+            
+            .morse-chart {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
+            
+            .cyber-card {
+                padding: 1.5rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .cyber-btn {
+                padding: 0.7rem 1.2rem;
+                font-size: 0.85rem;
+            }
+            
+            .category-tabs {
+                justify-content: center;
+            }
+        }
+        
+        /* Custom scrollbar Cyberpunk */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 10, 20, 0.8);
+            border-radius: 5px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(to bottom, var(--neon-blue), var(--neon-pink));
+            border-radius: 5px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(to bottom, var(--neon-pink), var(--neon-blue));
+        }
+        
+        /* Selection color */
+        ::selection {
+            background-color: rgba(0, 243, 255, 0.5);
+            color: white;
+        }
+        
+        /* Terminal style for morse output */
+        .terminal-style {
+            font-family: 'Share Tech Mono', monospace;
+            background: rgba(0, 0, 0, 0.9);
+            color: #0f0;
+            padding: 1rem;
+            border-radius: 0.25rem;
+            border: 1px solid #0f0;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+        }
+        
+        /* Neon text effect */
+        .neon-text {
+            text-shadow: 
+                0 0 5px currentColor,
+                0 0 10px currentColor,
+                0 0 20px currentColor;
+        }
+    </style>
+</head>
+<body>
+    <div class="cyber-grid"></div>
+    <div class="scan-line"></div>
+    
+    <header>
+        <div class="container header-container">
+            <div class="logo-container">
+                <div class="logo-icon">
+                    <i class="fas fa-satellite-dish"></i>
+                </div>
+                <div class="logo-text">
+                    <h1>MORSE</h1>
+                    <p></p>
+                </div>
+            </div>
+            
+            <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <div class="nav-container" id="navContainer">
+                <button class="nav-tab active" data-tab="learn">
+                    <i class="fas fa-code"></i> MÃ HÓA VIỆT
+                </button>
+                <button class="nav-tab" data-tab="converter">
+                    <i class="fas fa-exchange-alt"></i> CHUYỂN ĐỔI VIỆT
+                </button>
+                <button class="nav-tab" data-tab="practice">
+                    <i class="fas fa-headphones"></i> LUYỆN NGHE VIỆT
+                </button>
+                <button class="nav-tab" data-tab="ai-assistant">
+                    <i class="fas fa-robot"></i> AI TRỢ LÝ VIỆT
+                </button>
+                <button class="nav-tab" data-tab="progress">
+                    <i class="fas fa-chart-network"></i> TIẾN TRÌNH
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Phần học mã hóa tiếng Việt -->
+        <section id="learn" class="content-section active">
+            <div class="section-header">
+                <h2 class="section-title">HỆ THỐNG MÃ MORSE TIẾNG VIỆT</h2>
+                <p class="section-subtitle">Học mã Morse với bảng chữ cái tiếng Việt đầy đủ, bao gồm các ký tự có dấu đặc trưng.</p>
+            </div>
+            
+            <div class="vietnamese-note">
+                <i class="fas fa-info-circle" style="color: var(--neon-orange); margin-right: 0.5rem;"></i>
+                <strong>Lưu ý:</strong> Mã Morse tiếng Việt sử dụng quy ước quốc tế cho các chữ cái cơ bản, và có bổ sung mã cho các ký tự đặc biệt của tiếng Việt.
+            </div>
+            
+            <div class="category-tabs">
+                <button class="category-tab active" data-category="vietnamese">CHỮ CÁI TIẾNG VIỆT</button>
+                <button class="category-tab" data-category="numbers">SỐ</button>
+                <button class="category-tab" data-category="vietnamese-special">KÝ TỰ ĐẶC BIỆT VIỆT</button>
+                <button class="category-tab" data-category="common-symbols">KÝ TỰ THÔNG DỤNG</button>
+            </div>
+            
+            <!-- Bảng chữ cái tiếng Việt -->
+            <div id="vietnamese-chart" class="morse-chart-container active">
+                <div class="morse-chart" id="vietnameseChart">
+                    <!-- Chữ cái tiếng Việt sẽ được tạo bằng JavaScript -->
+                </div>
+            </div>
+            
+            <!-- Bảng số -->
+            <div id="numbers-chart" class="morse-chart-container">
+                <div class="morse-chart" id="numbersChart">
+                    <!-- Số sẽ được tạo bằng JavaScript -->
+                </div>
+            </div>
+            
+            <!-- Bảng ký tự đặc biệt tiếng Việt -->
+            <div id="vietnamese-special-chart" class="morse-chart-container">
+                <div class="morse-chart" id="vietnameseSpecialChart">
+                    <!-- Ký tự đặc biệt tiếng Việt sẽ được tạo bằng JavaScript -->
+                </div>
+            </div>
+            
+            <!-- Bảng ký tự thông dụng -->
+            <div id="common-symbols-chart" class="morse-chart-container">
+                <div class="morse-chart" id="commonSymbolsChart">
+                    <!-- Ký tự thông dụng sẽ được tạo bằng JavaScript -->
+                </div>
+            </div>
+            
+            <div class="cyber-card" id="practiceCard">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-bullseye"></i> THỰC HÀNH NHẬN DIỆN KÝ TỰ VIỆT
+                    </h3>
+                    <button id="playRandomChar" class="cyber-btn cyber-btn-primary">
+                        <i class="fas fa-random"></i> PHÁT NGẪU NHIÊN
+                    </button>
+                </div>
+                
+                <div class="sound-visualizer" id="soundVisualizer">
+                    <div class="sound-bar"></div>
+                    <div class="sound-bar"></div>
+                    <div class="sound-bar"></div>
+                    <div class="sound-bar"></div>
+                    <div class="sound-bar"></div>
+                </div>
+                
+                <div class="input-group">
+                    <label for="guessInput" class="input-label">NHẬP KÝ TỰ TIẾNG VIỆT BẠN NGHE ĐƯỢC</label>
+                    <input type="text" id="guessInput" class="cyber-input" placeholder="Nhập ký tự (ví dụ: A, Ă, Â, B...)" maxlength="1" autofocus>
+                </div>
+                
+                <div class="flex gap-2">
+                    <button id="submitGuess" class="cyber-btn cyber-btn-success">
+                        <i class="fas fa-check"></i> KIỂM TRA
+                    </button>
+                    <button id="hintButton" class="cyber-btn cyber-btn-outline">
+                        <i class="fas fa-lightbulb"></i> GỢI Ý
+                    </button>
+                    <button id="showCharInfo" class="cyber-btn cyber-btn-outline">
+                        <i class="fas fa-info-circle"></i> THÔNG TIN KÝ TỰ
+                    </button>
+                </div>
+                
+                <div id="guessFeedback" class="feedback mt-2"></div>
+            </div>
+        </section>
+
+        <!-- Phần chuyển đổi văn bản tiếng Việt -->
+        <section id="converter" class="content-section">
+            <div class="section-header">
+                <h2 class="section-title">CHUYỂN ĐỔI VĂN BẢN TIẾNG VIỆT</h2>
+                <p class="section-subtitle">Nhập văn bản tiếng Việt để chuyển đổi thành mã Morse và nghe âm thanh. Hỗ trợ đầy đủ các ký tự tiếng Việt có dấu.</p>
+            </div>
+            
+            <div class="cyber-card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-language"></i> BỘ CHUYỂN ĐỔI VĂN BẢN TIẾNG VIỆT
+                    </h3>
+                    <button id="playTextMorse" class="cyber-btn cyber-btn-primary">
+                        <i class="fas fa-volume-up"></i> PHÁT ÂM THANH
+                    </button>
+                </div>
+                
+                <div class="converter-container">
+                    <div class="converter-box">
+                        <h3><i class="fas fa-keyboard"></i> VĂN BẢN TIẾNG VIỆT</h3>
+                        <textarea id="textInput" class="cyber-input" rows="6" placeholder="Nhập văn bản tiếng Việt bạn muốn chuyển đổi sang mã Morse...">XIN CHÀO VIỆT NAM</textarea>
+                        <div class="flex gap-2 mt-3">
+                            <button id="convertToMorse" class="cyber-btn cyber-btn-primary w-full">
+                                <i class="fas fa-arrow-right"></i> CHUYỂN ĐỔI
+                            </button>
+                            <button id="clearText" class="cyber-btn cyber-btn-outline">
+                                <i class="fas fa-trash"></i> XÓA
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="converter-box">
+                        <h3><i class="fas fa-broadcast-tower"></i> MÃ MORSE TIẾNG VIỆT</h3>
+                        <div id="morseOutput" class="converter-output terminal-style">
+                            -..- .. -. / -.-. .... .- .-.. --- / ...- .. . - / -. .- --
+                        </div>
+                        <div class="flex gap-2 mt-3">
+                            <button id="copyMorse" class="cyber-btn cyber-btn-outline w-full">
+                                <i class="fas fa-copy"></i> SAO CHÉP MÃ
+                            </button>
+                            <button id="slowSpeed" class="cyber-btn cyber-btn-outline">
+                                <i class="fas fa-tachometer-alt"></i> TỐC ĐỘ CHẬM
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="input-group mt-4">
+                    <label class="input-label">VÍ DỤ TIẾNG VIỆT THÔNG DỤNG</label>
+                    <div class="predefined-questions">
+                        <button class="question-chip" data-text="SOS CỨU">SOS CỨU</button>
+                        <button class="question-chip" data-text="XIN CHÀO">XIN CHÀO</button>
+                        <button class="question-chip" data-text="CẢM ƠN">CẢM ƠN</button>
+                        <button class="question-chip" data-text="TÔI YÊU VIỆT NAM">TÔI YÊU VIỆT NAM</button>
+                        <button class="question-chip" data-text="HÀ NỘI THỦ ĐÔ">HÀ NỘI THỦ ĐÔ</button>
+                    </div>
+                </div>
+                
+                <div class="vietnamese-note mt-3">
+                    <i class="fas fa-volume-up" style="color: var(--neon-orange); margin-right: 0.5rem;"></i>
+                    <strong>Lưu ý phát âm:</strong> Mã Morse tiếng Việt phát âm theo quy ước quốc tế, các ký tự có dấu sẽ được phát âm như ký tự gốc kết hợp với mã đặc biệt.
+                </div>
+            </div>
+            
+            <div class="cyber-card mt-4">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-headphones"></i> LUYỆN NGHE CỤM TIẾNG VIỆT
+                    </h3>
+                </div>
+                
+                <div class="practice-area">
+                    <div class="sound-visualizer" id="textVisualizer">
+                        <div class="sound-bar"></div>
+                        <div class="sound-bar"></div>
+                        <div class="sound-bar"></div>
+                        <div class="sound-bar"></div>
+                        <div class="sound-bar"></div>
+                    </div>
+                    
+                    <div class="morse-display" id="textMorseDisplay">
+                        -..- .. -. / -.-. .... .- .-.. --- / ...- .. . - / -. .- --
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="textPracticeInput" class="input-label">NHẬP VĂN BẢN TIẾNG VIỆT BẠN NGHE ĐƯỢC</label>
+                        <input type="text" id="textPracticeInput" class="cyber-input" placeholder="Nhập văn bản tiếng Việt bạn nghe được..." autofocus>
+                    </div>
+                    
+                    <div class="flex gap-2">
+                        <button id="checkTextPractice" class="cyber-btn cyber-btn-success">
+                            <i class="fas fa-check-circle"></i> KIỂM TRA
+                        </button>
+                        <button id="playTextPractice" class="cyber-btn cyber-btn-primary">
+                            <i class="fas fa-redo"></i> PHÁT LẠI
+                        </button>
+                        <button id="playSlowTextPractice" class="cyber-btn cyber-btn-outline">
+                            <i class="fas fa-tachometer-alt"></i> PHÁT CHẬM
+                        </button>
+                    </div>
+                    
+                    <div id="textPracticeFeedback" class="feedback mt-2"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Phần luyện nghe tiếng Việt -->
+        <section id="practice" class="content-section">
+            <div class="section-header">
+                <h2 class="section-title">HỆ THỐNG LUYỆN NGHE MORSE TIẾNG VIỆT</h2>
+                <p class="section-subtitle">Rèn luyện kỹ năng nghe và giải mã Morse tiếng Việt với nhiều cấp độ từ cơ bản đến nâng cao.</p>
+            </div>
+            
+            <div class="cyber-card">
+                <div class="card-header">
+                    <div>
+                        <h3 class="card-title">
+                            <i class="fas fa-brain"></i> BÀI TẬP LUYỆN NGHE TIẾNG VIỆT
+                        </h3>
+                        <p class="text-sm mt-1">Độ khó: <span id="difficultyLabel" class="neon-text" style="color: var(--neon-blue);">CƠ BẢN</span></p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button id="playExercise" class="cyber-btn cyber-btn-primary">
+                            <i class="fas fa-volume-up"></i> PHÁT MORSE VIỆT
+                        </button>
+                        <button id="showAnswer" class="cyber-btn cyber-btn-warning">
+                            <i class="fas fa-eye"></i> XEM ĐÁP ÁN
+                        </button>
+                        <button id="nextExercise" class="cyber-btn cyber-btn-success">
+                            <i class="fas fa-forward"></i> TIẾP THEO
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="practice-area">
+                    <div class="sound-visualizer" id="exerciseVisualizer">
+                        <div class="sound-bar"></div>
+                        <div class="sound-bar"></div>
+                        <div class="sound-bar"></div>
+                        <div class="sound-bar"></div>
+                        <div class="sound-bar"></div>
+                    </div>
+                    
+                    <div class="morse-display" id="morseExerciseOutput">
+                        <!-- Mã Morse sẽ hiển thị ở đây -->
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="exerciseInput" class="input-label">NHẬP KÝ TỰ/TỪ TIẾNG VIỆT BẠN NGHE ĐƯỢC</label>
+                        <input type="text" id="exerciseInput" class="cyber-input" placeholder="Nhập câu trả lời tiếng Việt của bạn..." autofocus>
+                    </div>
+                    
+                    <button id="checkExercise" class="cyber-btn cyber-btn-primary w-full">
+                        <i class="fas fa-check-circle"></i> KIỂM TRA KẾT QUẢ
+                    </button>
+                    
+                    <div id="exerciseFeedback" class="feedback mt-2"></div>
+                </div>
+                
+                <div class="mt-4">
+                    <p class="input-label mb-2">CẤU HÌNH ĐỘ KHÓ:</p>
+                    <div class="difficulty-selector">
+                        <button data-difficulty="viet-basic" class="difficulty-btn active">CƠ BẢN VIỆT (1-3 ký tự)</button>
+                        <button data-difficulty="viet-medium" class="difficulty-btn">TRUNG BÌNH VIỆT (từ đơn)</button>
+                        <button data-difficulty="viet-hard" class="difficulty-btn">NÂNG CAO VIỆT (từ ghép)</button>
+                        <button data-difficulty="viet-expert" class="difficulty-btn">CHUYÊN GIA VIỆT (câu ngắn)</button>
+                        <button data-difficulty="viet-master" class="difficulty-btn">BẬC THẦY VIỆT (câu dài)</button>
+                    </div>
+                </div>
+                
+                <div class="vietnamese-note mt-3">
+                    <i class="fas fa-lightbulb" style="color: var(--neon-orange); margin-right: 0.5rem;"></i>
+                    <strong>Mẹo học:</strong> Tập trung vào các ký tự đặc biệt của tiếng Việt trước (Ă, Â, Đ, Ê, Ô, Ơ, Ư) vì chúng có mã Morse khác biệt so với các ký tự quốc tế.
+                </div>
+            </div>
+            
+            <div class="cyber-card mt-4">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-history"></i> LỊCH SỬ LUYỆN TẬP TIẾNG VIỆT
+                    </h3>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value" id="practiceCount">18</div>
+                        <div class="stat-label">BÀI TẬP ĐÃ HOÀN THÀNH</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="accuracyRate">85%</div>
+                        <div class="stat-label">ĐỘ CHÍNH XÁC VIỆT</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="vietCharsMastered">12</div>
+                        <div class="stat-label">KÝ TỰ VIỆT THÀNH THẠO</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="totalTime">96</div>
+                        <div class="stat-label">PHÚT LUYỆN TẬP</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Phần AI trợ lý tiếng Việt -->
+        <section id="ai-assistant" class="content-section">
+            <div class="section-header">
+                <h2 class="section-title">TRỢ LÝ AI MORSE TIẾNG VIỆT</h2>
+                <p class="section-subtitle">Hỏi đáp với AI về mã Morse tiếng Việt, yêu cầu tạo bài tập hoặc nhận lời khuyên học tập cá nhân hóa.</p>
+            </div>
+            
+            <div class="cyber-card">
+                <div class="chat-container">
+                    <div class="chat-header">
+                        <i class="fas fa-robot"></i>
+                        <span>TRỢ LÝ MORSE AI VIỆT</span>
+                    </div>
+                    
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="message ai-message">
+                            <strong>HỆ THỐNG KHỞI ĐỘNG...</strong> Tôi là trợ lý AI học mã Morse tiếng Việt. Tôi có thể giúp bạn:
+                            <ul style="margin-top: 10px; margin-left: 20px;">
+                                <li>Giải thích về mã Morse tiếng Việt</li>
+                                <li>Tạo bài tập luyện nghe tiếng Việt tùy chỉnh</li>
+                                <li>Kiểm tra kiến thức của bạn về mã Morse tiếng Việt</li>
+                                <li>Đưa ra lời khuyên để học mã Morse tiếng Việt hiệu quả</li>
+                            </ul>
+                            Hãy hỏi tôi bất cứ điều gì về mã Morse tiếng Việt!
+                        </div>
+                    </div>
+                    
+                    <div class="chat-input-container">
+                        <input type="text" class="chat-input" id="userInput" placeholder="Nhập câu hỏi của bạn về mã Morse tiếng Việt..." autofocus>
+                        <button class="cyber-btn cyber-btn-primary cyber-btn-icon" id="sendMessage">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <p class="input-label mt-3 mb-2">TRUY VẤN NHANH TIẾNG VIỆT:</p>
+                <div class="predefined-questions">
+                    <button class="question-chip" data-question="Mã Morse tiếng Việt là gì?">Mã Morse tiếng Việt là gì?</button>
+                    <button class="question-chip" data-question="Các ký tự đặc biệt tiếng Việt trong mã Morse?">Ký tự đặc biệt tiếng Việt</button>
+                    <button class="question-chip" data-question="Tạo bài tập luyện nghe 5 ký tự tiếng Việt">Bài tập 5 ký tự Việt</button>
+                    <button class="question-chip" data-question="Mẹo học mã Morse tiếng Việt nhanh">Mẹo học nhanh tiếng Việt</button>
+                    <button class="question-chip" data-question="Sự khác biệt giữa mã Morse quốc tế và tiếng Việt">Khác biệt Morse Việt</button>
+                    <button class="question-chip" data-question="Lịch sử mã Morse tại Việt Nam">Lịch sử Morse Việt Nam</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Phần tiến trình học -->
+        <section id="progress" class="content-section">
+            <div class="section-header">
+                <h2 class="section-title">THỐNG KÊ TIẾN TRÌNH HỌC TIẾNG VIỆT</h2>
+                <p class="section-subtitle">Theo dõi tiến độ học tập và thành tích của bạn trong hệ thống Cyber Morse Việt.</p>
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-header">
+                    <div>
+                        <h3 class="card-title">TỔNG QUAN TIẾN ĐỘ TIẾNG VIỆT</h3>
+                        <p>Bạn đã học được <strong id="learnedCount" class="neon-text" style="color: var(--neon-blue);">15</strong> trên <strong>29</strong> ký tự tiếng Việt</p>
+                    </div>
+                    <div>
+                        <button id="resetProgress" class="cyber-btn cyber-btn-outline">
+                            <i class="fas fa-redo"></i> ĐẶT LẠI
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value" id="totalPracticeCount">18</div>
+                        <div class="stat-label">TỔNG BÀI TẬP VIỆT</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="overallAccuracy">85%</div>
+                        <div class="stat-label">TỶ LỆ CHÍNH XÁC VIỆT</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="streakDays">3</div>
+                        <div class="stat-label">NGÀY HỌC LIÊN TIẾP</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="timeSpent">32</div>
+                        <div class="stat-label">PHÚT HỌC HÔM NAY</div>
+                    </div>
+                </div>
+                
+                <div class="mt-4">
+                    <h3 class="card-title mb-3">KÝ TỰ TIẾNG VIỆT ĐÃ THÀNH THẠO</h3>
+                    <div id="masteredChars" class="morse-chart">
+                        <!-- Các ký tự tiếng Việt đã học sẽ hiển thị ở đây -->
+                    </div>
+                </div>
+                
+                <div class="mt-4">
+                    <h3 class="card-title mb-3">THÀNH TỰU TIẾNG VIỆT</h3>
+                    <div class="flex flex-wrap gap-2">
+                        <div class="cyber-btn cyber-btn-outline" style="border-color: var(--neon-orange);">
+                            <i class="fas fa-award" style="color: var(--neon-orange);"></i> NHẬP MÔN MORSE VIỆT
+                        </div>
+                        <div class="cyber-btn cyber-btn-outline" style="border-color: var(--neon-green);">
+                            <i class="fas fa-award" style="color: var(--neon-green);"></i> 10 BÀI HOÀN THÀNH
+                        </div>
+                        <div class="cyber-btn cyber-btn-outline" style="border-color: var(--neon-blue);">
+                            <i class="fas fa-award" style="color: var(--neon-blue);"></i> CHUYÊN GIA CHỮ CÁI VIỆT
+                        </div>
+                        <div class="cyber-btn cyber-btn-outline" style="border-color: var(--neon-pink);">
+                            <i class="fas fa-award" style="color: var(--neon-pink);"></i> KÝ TỰ ĐẶC BIỆT THÀNH THẠO
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-container">
+                <div class="footer-section">
+                    <h3>CYBER MORSE VIỆT v2.5.1</h3>
+                    <p>Hệ thống học mã Morse tiếng Việt với giao diện Cyberpunk và AI hỗ trợ. Phát triển bởi các kỹ sư Web & AI Việt Nam, mang đến trải nghiệm học tập tương lai.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>MODULE HỆ THỐNG VIỆT</h3>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fas fa-code"></i> Mã hóa Morse tiếng Việt</a></li>
+                        <li><a href="#"><i class="fas fa-exchange-alt"></i> Chuyển đổi văn bản Việt</a></li>
+                        <li><a href="#"><i class="fas fa-headphones"></i> Luyện nghe đa cấp độ Việt</a></li>
+                        <li><a href="#"><i class="fas fa-robot"></i> AI trợ lý học tập tiếng Việt</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>CÔNG NGHỆ NỀN VIỆT</h3>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fas fa-volume-up"></i> Web Audio API tiếng Việt</a></li>
+                        <li><a href="#"><i class="fas fa-brain"></i> Neural Network AI tiếng Việt</a></li>
+                        <li><a href="#"><i class="fas fa-satellite"></i> Real-time Processing Việt</a></li>
+                        <li><a href="#"><i class="fas fa-palette"></i> Cyberpunk UI Engine Việt</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2077 CYBER MORSE VIỆT SYSTEM. ALL RIGHTS RESERVED.</p>
+                <p class="mt-1">Phiên bản 2.5.1 - Giao diện Cyberpunk & Hệ thống AI tiếng Việt nâng cao</p>
+                <p class="mt-1">Phát triển bởi đội ngũ kỹ sư Việt Nam</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Dữ liệu mã Morse tiếng Việt đầy đủ
+        const morseCodeVietnamese = {
+            // Chữ cái cơ bản (giống quốc tế)
+            'A': '.-', 'B': '-...', 'C': '-.-.', 'D': '-..', 'E': '.', 'F': '..-.',
+            'G': '--.', 'H': '....', 'I': '..', 'J': '.---', 'K': '-.-', 'L': '.-..',
+            'M': '--', 'N': '-.', 'O': '---', 'P': '.--.', 'Q': '--.-', 'R': '.-.',
+            'S': '...', 'T': '-', 'U': '..-', 'V': '...-', 'W': '.--', 'X': '-..-',
+            'Y': '-.--', 'Z': '--..',
+            
+            // Ký tự đặc biệt tiếng Việt (quy ước)
+            'Ă': '.-.-',      // A với móc
+            'Â': '.--.-',     // A với mũ
+            'Đ': '-..-.',     // D với gạch ngang
+            'Ê': '-.-..',     // E với mũ
+            'Ô': '---.',      // O với mũ
+            'Ơ': '.--.',      // O với móc
+            'Ư': '..--',      // U với móc
+            
+            // Ký tự tiếng Việt viết thường (cùng mã với chữ hoa)
+            'a': '.-', 'b': '-...', 'c': '-.-.', 'd': '-..', 'e': '.', 'f': '..-.',
+            'g': '--.', 'h': '....', 'i': '..', 'j': '.---', 'k': '-.-', 'l': '.-..',
+            'm': '--', 'n': '-.', 'o': '---', 'p': '.--.', 'q': '--.-', 'r': '.-.',
+            's': '...', 't': '-', 'u': '..-', 'v': '...-', 'w': '.--', 'x': '-..-',
+            'y': '-.--', 'z': '--..',
+            'ă': '.-.-', 'â': '.--.-', 'đ': '-..-.', 'ê': '-.-..', 'ô': '---.', 'ơ': '.--.', 'ư': '..--',
+            
+            // Số
+            '0': '-----', '1': '.----', '2': '..---', '3': '...--', '4': '....-',
+            '5': '.....', '6': '-....', '7': '--...', '8': '---..', '9': '----.',
+            
+            // Dấu tiếng Việt (quy ước riêng cho mã Morse)
+            '`': '..--..',    // Dấu huyền
+            '´': '.-.-.-',    // Dấu sắc
+            '˜': '--..--',    // Dấu ngã
+            '¨': '---...',    // Dấu hai chấm (dấu nặng/trăng)
+            '̉': '..--.-',    // Dấu hỏi
+            
+            // Ký tự đặc biệt thông dụng
+            '.': '.-.-.-', ',': '--..--', '?': '..--..', "'": '.----.', '!': '-.-.--',
+            '/': '-..-.', '(': '-.--.', ')': '-.--.-', '&': '.-...', ':': '---...',
+            ';': '-.-.-.', '=': '-...-', '+': '.-.-.', '-': '-....-', '_': '..--.-',
+            '"': '.-..-.', '$': '...-..-', '@': '.--.-.', ' ': '/'
+        };
+
+        // Thông tin chi tiết về ký tự tiếng Việt
+        const vietnameseCharInfo = {
+            'Ă': { name: 'A ăng', description: 'Chữ A với móc, phát âm như "ă"', example: 'Ăn, Ăn ở' },
+            'Â': { name: 'A mũ', description: 'Chữ A với mũ, phát âm như "â"', example: 'Âm, Cầu Âm' },
+            'Đ': { name: 'Đờ', description: 'Chữ D với gạch ngang, phát âm như "đ"', example: 'Đi, Đẹp' },
+            'Ê': { name: 'E mũ', description: 'Chữ E với mũ, phát âm như "ê"', example: 'Êm, Mềm' },
+            'Ô': { name: 'O mũ', description: 'Chữ O với mũ, phát âm như "ô"', example: 'Ô, Cô' },
+            'Ơ': { name: 'O móc', description: 'Chữ O với móc, phát âm như "ơ"', example: 'Ơ, Bơ' },
+            'Ư': { name: 'U móc', description: 'Chữ U với móc, phát âm như "ư"', example: 'Ư, Tư' }
+        };
+
+        // Phân loại dữ liệu cho tiếng Việt
+        const vietnameseBasic = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 
+                                 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+        
+        const vietnameseSpecial = ['Ă', 'Â', 'Đ', 'Ê', 'Ô', 'Ơ', 'Ư'];
+        
+        const vietnameseAllLetters = [...vietnameseBasic, ...vietnameseSpecial];
+        
+        const numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+        
+        const vietnameseAccents = ['`', '´', '˜', '¨', '̉']; // Dấu tiếng Việt
+        
+        const commonSymbols = ['.', ',', '?', '!', '/', '(', ')', '&', ':', ';', '=', '+', '-', '_', '"', '$', '@'];
+
+        // Biến toàn cục
+        let currentTab = 'learn';
+        let currentExercise = '';
+        let currentAnswer = '';
+        let audioContext;
+        let masterNodes = [];
+        let learnedChars = new Set(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'Ă', 'Â', 'Đ']);
+        let practiceCount = 18;
+        let correctCount = 15;
+        let currentDifficulty = 'viet-basic';
+        let currentChar = '';
+        let lastFocusedElement = null;
+        let currentCategory = 'vietnamese';
+        let currentTextForPractice = 'XIN CHÀO VIỆT NAM';
+        let playSpeed = 1.0; // Tốc độ mặc định
+
+        // Khởi tạo ứng dụng
+        document.addEventListener('DOMContentLoaded', function() {
+            initTabs();
+            initMorseCharts();
+            initPractice();
+            initConverter();
+            initAI();
+            updateProgress();
+            
+            // Khởi tạo Audio Context
+            try {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            } catch (e) {
+                console.error('Web Audio API không được hỗ trợ trên trình duyệt này');
+                showFeedback('error', 'Trình duyệt của bạn không hỗ trợ âm thanh. Vui lòng thử trên trình duyệt khác.');
+            }
+            
+            // Thiết lập autofocus cho input đầu tiên
+            setTimeout(() => {
+                const firstInput = document.querySelector('.content-section.active input');
+                if (firstInput) {
+                    firstInput.focus();
+                    lastFocusedElement = firstInput;
+                }
+            }, 300);
+            
+            // Lưu trữ element được focus cuối cùng
+            document.addEventListener('focusin', function(e) {
+                if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'BUTTON') {
+                    lastFocusedElement = e.target;
+                }
+            });
+        });
+
+        // Xử lý chuyển tab với autofocus
+        function initTabs() {
+            const tabs = document.querySelectorAll('.nav-tab');
+            const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+            const navContainer = document.getElementById('navContainer');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabId = this.getAttribute('data-tab');
+                    
+                    // Cập nhật tab active
+                    tabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Hiển thị nội dung tab tương ứng
+                    document.querySelectorAll('.content-section').forEach(section => {
+                        section.classList.remove('active');
+                    });
+                    document.getElementById(tabId).classList.add('active');
+                    
+                    currentTab = tabId;
+                    
+                    // Đóng menu mobile nếu đang mở
+                    navContainer.classList.remove('active');
+                    
+                    // Tự động focus vào input đầu tiên của tab mới
+                    setTimeout(() => {
+                        const firstInput = document.querySelector(`#${tabId} input`);
+                        if (firstInput) {
+                            firstInput.focus();
+                            lastFocusedElement = firstInput;
+                        } else {
+                            // Nếu không có input, focus vào nút đầu tiên
+                            const firstButton = document.querySelector(`#${tabId} button`);
+                            if (firstButton) {
+                                firstButton.focus();
+                                lastFocusedElement = firstButton;
+                            }
+                        }
+                    }, 100);
+                    
+                    // Cập nhật URL hash
+                    window.history.pushState(null, null, `#${tabId}`);
+                });
+            });
+            
+            // Xử lý menu mobile
+            mobileMenuToggle.addEventListener('click', function() {
+                navContainer.classList.toggle('active');
+            });
+            
+            // Đóng menu khi click bên ngoài
+            document.addEventListener('click', function(e) {
+                if (!navContainer.contains(e.target) && !mobileMenuToggle.contains(e.target)) {
+                    navContainer.classList.remove('active');
+                }
+            });
+            
+            // Xử lý hash URL khi tải trang
+            if (window.location.hash) {
+                const tabId = window.location.hash.substring(1);
+                const tabElement = document.querySelector(`.nav-tab[data-tab="${tabId}"]`);
+                if (tabElement) {
+                    tabElement.click();
+                }
+            }
+            
+            // Xử lý category tabs
+            const categoryTabs = document.querySelectorAll('.category-tab');
+            categoryTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const category = this.getAttribute('data-category');
+                    
+                    // Cập nhật category active
+                    categoryTabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Ẩn tất cả các bảng
+                    document.querySelectorAll('.morse-chart-container').forEach(container => {
+                        container.classList.remove('active');
+                    });
+                    
+                    // Hiển thị bảng được chọn
+                    document.getElementById(`${category}-chart`).classList.add('active');
+                    
+                    currentCategory = category;
+                });
+            });
+        }
+
+        // Khởi tạo các bảng mã Morse tiếng Việt
+        function initMorseCharts() {
+            initMorseChart('vietnameseChart', vietnameseAllLetters, true);
+            initMorseChart('numbersChart', numbers, false);
+            initMorseChart('vietnameseSpecialChart', vietnameseSpecial, true);
+            initMorseChart('commonSymbolsChart', commonSymbols, false);
+        }
+
+        function initMorseChart(chartId, chars, isVietnamese = false) {
+            const chart = document.getElementById(chartId);
+            if (!chart) return;
+            
+            chart.innerHTML = '';
+            
+            chars.forEach(char => {
+                const card = document.createElement('div');
+                const isSpecialVietnamese = vietnameseSpecial.includes(char);
+                const charClass = isSpecialVietnamese ? 'vietnamese-char' : '';
+                
+                card.className = `morse-card ${learnedChars.has(char) ? 'learned' : ''}`;
+                card.innerHTML = `
+                    <div class="morse-char ${charClass}">${char}</div>
+                    <div class="morse-code">${morseCodeVietnamese[char]}</div>
+                    <button class="cyber-btn cyber-btn-outline btn-play-sound" data-char="${char}">
+                        <i class="fas fa-volume-up"></i> NGHE
+                    </button>
+                `;
+                
+                // Thêm sự kiện nghe âm thanh
+                const soundBtn = card.querySelector('.btn-play-sound');
+                soundBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    const char = this.getAttribute('data-char');
+                    playMorseChar(char);
+                    animateVisualizer('soundVisualizer');
+                });
+                
+                // Click vào card để chọn ký tự
+                card.addEventListener('click', function(e) {
+                    if (e.target.closest('.btn-play-sound')) {
+                        return;
+                    }
+                    
+                    if (currentTab === 'learn') {
+                        document.getElementById('guessInput').value = char;
+                        document.getElementById('guessInput').focus();
+                        lastFocusedElement = document.getElementById('guessInput');
+                        
+                        // Cuộn mượt đến phần thực hành
+                        smoothScrollToElement('practiceCard');
+                    }
+                });
+                
+                chart.appendChild(card);
+            });
+        }
+
+        // Khởi tạo phần luyện tập tiếng Việt
+        function initPractice() {
+            // Phát âm thanh ngẫu nhiên
+            document.getElementById('playRandomChar').addEventListener('click', function() {
+                let chars;
+                if (currentCategory === 'vietnamese') chars = vietnameseAllLetters;
+                else if (currentCategory === 'vietnamese-special') chars = vietnameseSpecial;
+                else if (currentCategory === 'numbers') chars = numbers;
+                else chars = [...vietnameseAllLetters, ...numbers, ...commonSymbols];
+                
+                const randomChar = chars[Math.floor(Math.random() * chars.length)];
+                playMorseChar(randomChar);
+                animateVisualizer('soundVisualizer');
+                
+                // Lưu ký tự hiện tại để kiểm tra
+                currentChar = randomChar;
+                
+                // Focus vào input đoán
+                document.getElementById('guessInput').focus();
+                lastFocusedElement = document.getElementById('guessInput');
+            });
+            
+            // Nút gợi ý
+            document.getElementById('hintButton').addEventListener('click', function() {
+                if (currentChar) {
+                    const morse = morseCodeVietnamese[currentChar];
+                    showFeedback('info', `Gợi ý: Mã Morse cho ký tự này là "${morse}"`);
+                } else {
+                    showFeedback('error', 'Vui lòng phát một ký tự ngẫu nhiên trước khi xin gợi ý.');
+                }
+            });
+            
+            // Nút thông tin ký tự tiếng Việt
+            document.getElementById('showCharInfo').addEventListener('click', function() {
+                if (currentChar && vietnameseCharInfo[currentChar]) {
+                    const info = vietnameseCharInfo[currentChar];
+                    showFeedback('info', `<strong>${currentChar}</strong>: ${info.name} - ${info.description}. Ví dụ: ${info.example}`);
+                } else if (currentChar) {
+                    showFeedback('info', `Ký tự "${currentChar}" là ký tự cơ bản trong bảng chữ cái.`);
+                } else {
+                    showFeedback('error', 'Vui lòng phát một ký tự ngẫu nhiên trước.');
+                }
+            });
+            
+            // Kiểm tra đoán
+            document.getElementById('submitGuess').addEventListener('click', function() {
+                checkGuess();
+            });
+            
+            // Enter để kiểm tra đoán
+            document.getElementById('guessInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    checkGuess();
+                }
+            });
+            
+            // Phát bài tập
+            document.getElementById('playExercise').addEventListener('click', function() {
+                generateVietnameseExercise();
+                playMorseSequence(currentExercise, playSpeed);
+                animateVisualizer('exerciseVisualizer');
+                
+                // Focus vào input bài tập
+                document.getElementById('exerciseInput').focus();
+                lastFocusedElement = document.getElementById('exerciseInput');
+            });
+            
+            // Hiển thị đáp án
+            document.getElementById('showAnswer').addEventListener('click', function() {
+                if (currentAnswer) {
+                    showFeedback('info', `Đáp án: "${currentAnswer}"`);
+                } else {
+                    showFeedback('error', 'Vui lòng tạo bài tập trước.');
+                }
+            });
+            
+            // Bài tập tiếp theo
+            document.getElementById('nextExercise').addEventListener('click', function() {
+                generateVietnameseExercise();
+                document.getElementById('exerciseInput').value = '';
+                document.getElementById('exerciseFeedback').innerHTML = '';
+                
+                // Focus vào input bài tập
+                document.getElementById('exerciseInput').focus();
+                lastFocusedElement = document.getElementById('exerciseInput');
+            });
+            
+            // Kiểm tra bài tập
+            document.getElementById('checkExercise').addEventListener('click', function() {
+                checkVietnameseExercise();
+            });
+            
+            // Enter để kiểm tra bài tập
+            document.getElementById('exerciseInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    checkVietnameseExercise();
+                }
+            });
+            
+            // Nút độ khó tiếng Việt
+            document.querySelectorAll('.difficulty-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.difficulty-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    currentDifficulty = this.getAttribute('data-difficulty');
+                    const difficultyLabels = {
+                        'viet-basic': 'CƠ BẢN VIỆT',
+                        'viet-medium': 'TRUNG BÌNH VIỆT',
+                        'viet-hard': 'NÂNG CAO VIỆT',
+                        'viet-expert': 'CHUYÊN GIA VIỆT',
+                        'viet-master': 'BẬC THẦY VIỆT'
+                    };
+                    document.getElementById('difficultyLabel').textContent = difficultyLabels[currentDifficulty];
+                    
+                    // Tạo bài tập mới với độ khó mới
+                    generateVietnameseExercise();
+                    
+                    // Focus vào input bài tập
+                    document.getElementById('exerciseInput').focus();
+                    lastFocusedElement = document.getElementById('exerciseInput');
+                });
+            });
+            
+            // Nút đặt lại tiến trình
+            document.getElementById('resetProgress').addEventListener('click', function() {
+                if (confirm('Bạn có chắc chắn muốn đặt lại tiến trình học tiếng Việt? Hành động này không thể hoàn tác.')) {
+                    learnedChars = new Set(['A', 'B', 'C', 'D', 'E', 'Ă', 'Â', 'Đ']);
+                    practiceCount = 0;
+                    correctCount = 0;
+                    updateProgress();
+                    initMorseCharts();
+                    showFeedback('success', 'Đã đặt lại tiến trình học tiếng Việt.');
+                }
+            });
+            
+            // Tạo bài tập đầu tiên
+            generateVietnameseExercise();
+        }
+
+        // Khởi tạo phần chuyển đổi văn bản tiếng Việt
+        function initConverter() {
+            // Chuyển đổi văn bản sang Morse
+            document.getElementById('convertToMorse').addEventListener('click', function() {
+                convertVietnameseTextToMorse();
+            });
+            
+            // Phát âm thanh từ văn bản
+            document.getElementById('playTextMorse').addEventListener('click', function() {
+                const text = document.getElementById('textInput').value.trim().toUpperCase();
+                if (text) {
+                    playMorseSequence(text, playSpeed);
+                    animateVisualizer('textVisualizer');
+                    currentTextForPractice = text;
+                    
+                    // Hiển thị mã Morse
+                    const morse = vietnameseTextToMorse(text);
+                    document.getElementById('textMorseDisplay').textContent = morse;
+                } else {
+                    showFeedback('error', 'Vui lòng nhập văn bản tiếng Việt trước.', 'textPracticeFeedback');
+                }
+            });
+            
+            // Xóa văn bản
+            document.getElementById('clearText').addEventListener('click', function() {
+                document.getElementById('textInput').value = '';
+                document.getElementById('morseOutput').textContent = '';
+                document.getElementById('textMorseDisplay').textContent = '';
+            });
+            
+            // Sao chép mã Morse
+            document.getElementById('copyMorse').addEventListener('click', function() {
+                const morse = document.getElementById('morseOutput').textContent;
+                if (morse) {
+                    navigator.clipboard.writeText(morse).then(() => {
+                        showFeedback('success', 'Đã sao chép mã Morse tiếng Việt vào clipboard!');
+                    });
+                }
+            });
+            
+            // Tốc độ chậm
+            document.getElementById('slowSpeed').addEventListener('click', function() {
+                playSpeed = playSpeed === 1.0 ? 1.5 : 1.0;
+                this.innerHTML = playSpeed === 1.0 ? 
+                    '<i class="fas fa-tachometer-alt"></i> TỐC ĐỘ CHẬM' : 
+                    '<i class="fas fa-tachometer-alt"></i> TỐC ĐỘ BÌNH THƯỜNG';
+                showFeedback('info', playSpeed === 1.0 ? 'Đã chuyển về tốc độ bình thường' : 'Đã chuyển sang tốc độ chậm');
+            });
+            
+            // Ví dụ nhanh tiếng Việt
+            document.querySelectorAll('.question-chip[data-text]').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const text = this.getAttribute('data-text');
+                    document.getElementById('textInput').value = text;
+                    convertVietnameseTextToMorse();
+                });
+            });
+            
+            // Luyện nghe văn bản tiếng Việt
+            document.getElementById('playTextPractice').addEventListener('click', function() {
+                if (currentTextForPractice) {
+                    playMorseSequence(currentTextForPractice, playSpeed);
+                    animateVisualizer('textVisualizer');
+                } else {
+                    showFeedback('error', 'Vui lòng chuyển đổi văn bản tiếng Việt trước.', 'textPracticeFeedback');
+                }
+            });
+            
+            // Phát chậm cho luyện nghe
+            document.getElementById('playSlowTextPractice').addEventListener('click', function() {
+                if (currentTextForPractice) {
+                    playMorseSequence(currentTextForPractice, 1.5);
+                    animateVisualizer('textVisualizer');
+                    showFeedback('info', 'Đang phát với tốc độ chậm...', 'textPracticeFeedback');
+                } else {
+                    showFeedback('error', 'Vui lòng chuyển đổi văn bản tiếng Việt trước.', 'textPracticeFeedback');
+                }
+            });
+            
+            // Kiểm tra luyện nghe văn bản tiếng Việt
+            document.getElementById('checkTextPractice').addEventListener('click', function() {
+                const userAnswer = document.getElementById('textPracticeInput').value.trim().toUpperCase();
+                const feedback = document.getElementById('textPracticeFeedback');
+                
+                if (!currentTextForPractice) {
+                    showFeedback('error', 'Vui lòng chuyển đổi và phát văn bản tiếng Việt trước!', 'textPracticeFeedback');
+                    return;
+                }
+                
+                if (!userAnswer) {
+                    showFeedback('error', 'Vui lòng nhập câu trả lời tiếng Việt của bạn.', 'textPracticeFeedback');
+                    return;
+                }
+                
+                // Chuẩn hóa để so sánh (có thể bỏ qua dấu)
+                const normalizedUser = normalizeVietnamese(userAnswer);
+                const normalizedCorrect = normalizeVietnamese(currentTextForPractice);
+                
+                if (normalizedUser === normalizedCorrect || userAnswer === currentTextForPractice) {
+                    showFeedback('success', `Chính xác! "${currentTextForPractice}"`, 'textPracticeFeedback');
+                    
+                    // Tăng số bài tập đã làm
+                    practiceCount++;
+                    correctCount++;
+                    updateProgress();
+                    
+                    // Tự động tạo bài tập mới sau 2 giây
+                    setTimeout(() => {
+                        // Chuyển đổi văn bản mới tiếng Việt
+                        const texts = ['XIN CHÀO', 'VIỆT NAM', 'HÀ NỘI', 'TỔ QUỐC', 'ĐỘC LẬP', 'TỰ DO', 'HẠNH PHÚC'];
+                        const randomText = texts[Math.floor(Math.random() * texts.length)];
+                        document.getElementById('textInput').value = randomText;
+                        convertVietnameseTextToMorse();
+                        currentTextForPractice = randomText;
+                        document.getElementById('textPracticeInput').value = '';
+                    }, 2000);
+                } else {
+                    showFeedback('error', `Sai rồi! Đáp án đúng là "${currentTextForPractice}"`, 'textPracticeFeedback');
+                    
+                    // Tăng số bài tập đã làm
+                    practiceCount++;
+                    updateProgress();
+                    
+                    // Focus lại vào input để người dùng thử lại
+                    document.getElementById('textPracticeInput').focus();
+                    document.getElementById('textPracticeInput').select();
+                }
+            });
+            
+            // Enter để kiểm tra luyện nghe văn bản tiếng Việt
+            document.getElementById('textPracticeInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    document.getElementById('checkTextPractice').click();
+                }
+            });
+            
+            // Chuyển đổi văn bản mặc định
+            convertVietnameseTextToMorse();
+        }
+
+        // Chuẩn hóa tiếng Việt (loại bỏ dấu để so sánh)
+        function normalizeVietnamese(text) {
+            return text
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .replace(/đ/g, 'd')
+                .replace(/Đ/g, 'D');
+        }
+
+        // Chuyển đổi văn bản tiếng Việt sang Morse
+        function convertVietnameseTextToMorse() {
+            const text = document.getElementById('textInput').value.trim().toUpperCase();
+            if (!text) {
+                showFeedback('error', 'Vui lòng nhập văn bản tiếng Việt để chuyển đổi.');
+                return;
+            }
+            
+            const morse = vietnameseTextToMorse(text);
+            document.getElementById('morseOutput').textContent = morse;
+            document.getElementById('textMorseDisplay').textContent = morse;
+            currentTextForPractice = text;
+            
+            showFeedback('success', 'Đã chuyển đổi văn bản tiếng Việt thành mã Morse!');
+        }
+
+        // Hàm chuyển đổi văn bản tiếng Việt sang Morse
+        function vietnameseTextToMorse(text) {
+            let morse = '';
+            for (const char of text) {
+                if (char === ' ') {
+                    morse += '/ ';
+                } else if (morseCodeVietnamese[char]) {
+                    morse += morseCodeVietnamese[char] + ' ';
+                } else {
+                    // Thử tìm ký tự không dấu
+                    const normalizedChar = normalizeVietnamese(char);
+                    if (normalizedChar !== char && morseCodeVietnamese[normalizedChar]) {
+                        morse += morseCodeVietnamese[normalizedChar] + ' ';
+                    } else {
+                        morse += '? ';
+                    }
+                }
+            }
+            return morse.trim();
+        }
+
+        // Kiểm tra kết quả đoán ký tự tiếng Việt
+        function checkGuess() {
+            const guess = document.getElementById('guessInput').value.trim().toUpperCase();
+            const feedback = document.getElementById('guessFeedback');
+            
+            if (!currentChar) {
+                showFeedback('error', 'Vui lòng nhấn "Phát Ngẫu Nhiên" trước!', 'guessFeedback');
+                return;
+            }
+            
+            if (!guess) {
+                showFeedback('error', 'Vui lòng nhập ký tự tiếng Việt bạn nghe được.', 'guessFeedback');
+                return;
+            }
+            
+            // Chuẩn hóa để so sánh (cho phép nhập không dấu)
+            const normalizedGuess = normalizeVietnamese(guess);
+            const normalizedCurrent = normalizeVietnamese(currentChar);
+            
+            if (guess === currentChar || normalizedGuess === normalizedCurrent) {
+                showFeedback('success', `Chính xác! "${currentChar}" là ${morseCodeVietnamese[currentChar]}`, 'guessFeedback');
+                
+                // Hiển thị thông tin ký tự đặc biệt tiếng Việt
+                if (vietnameseCharInfo[currentChar]) {
+                    const info = vietnameseCharInfo[currentChar];
+                    setTimeout(() => {
+                        showFeedback('info', `<strong>Thông tin:</strong> ${info.name} - ${info.description}`, 'guessFeedback');
+                    }, 1000);
+                }
+                
+                // Thêm vào ký tự đã học nếu chưa có
+                if (!learnedChars.has(currentChar)) {
+                    learnedChars.add(currentChar);
+                    updateProgress();
+                    // Cập nhật giao diện bảng Morse
+                    updateMorseCards();
+                }
+                
+                // Tăng số bài tập đã làm
+                practiceCount++;
+                correctCount++;
+                updateProgress();
+                
+                // Xóa input và reset currentChar
+                document.getElementById('guessInput').value = '';
+                currentChar = '';
+                
+                // Tự động phát ký tự mới sau 1.5 giây
+                setTimeout(() => {
+                    document.getElementById('playRandomChar').click();
+                }, 1500);
+            } else {
+                showFeedback('error', `Sai rồi! Ký tự đúng là "${currentChar}" (${morseCodeVietnamese[currentChar]})`, 'guessFeedback');
+                
+                // Tăng số bài tập đã làm
+                practiceCount++;
+                updateProgress();
+                
+                // Focus lại vào input để người dùng thử lại
+                document.getElementById('guessInput').focus();
+                document.getElementById('guessInput').select();
+            }
+        }
+
+        // Cập nhật các card Morse tiếng Việt
+        function updateMorseCards() {
+            // Cập nhật tất cả các bảng
+            const allCards = document.querySelectorAll('.morse-card');
+            allCards.forEach(card => {
+                const charElement = card.querySelector('.morse-char');
+                if (charElement && learnedChars.has(charElement.textContent)) {
+                    card.classList.add('learned');
+                }
+            });
+        }
+
+        // Kiểm tra bài tập tiếng Việt
+        function checkVietnameseExercise() {
+            const userAnswer = document.getElementById('exerciseInput').value.trim().toUpperCase();
+            const feedback = document.getElementById('exerciseFeedback');
+            
+            if (!currentAnswer) {
+                showFeedback('error', 'Vui lòng tạo bài tập tiếng Việt trước!', 'exerciseFeedback');
+                return;
+            }
+            
+            if (!userAnswer) {
+                showFeedback('error', 'Vui lòng nhập câu trả lời tiếng Việt của bạn.', 'exerciseFeedback');
+                return;
+            }
+            
+            // Chuẩn hóa để so sánh (cho phép nhập không dấu)
+            const normalizedUser = normalizeVietnamese(userAnswer);
+            const normalizedCorrect = normalizeVietnamese(currentAnswer);
+            
+            if (userAnswer === currentAnswer || normalizedUser === normalizedCorrect) {
+                showFeedback('success', `Chính xác! "${currentAnswer}"`, 'exerciseFeedback');
+                
+                // Tăng số bài tập đã làm
+                practiceCount++;
+                correctCount++;
+                updateProgress();
+                
+                // Thêm các ký tự mới vào danh sách đã học
+                for (const char of currentAnswer) {
+                    if (char !== ' ' && !learnedChars.has(char)) {
+                        learnedChars.add(char);
+                    }
+                }
+                updateProgress();
+                
+                // Tự động chuyển bài tập mới sau 2 giây
+                setTimeout(() => {
+                    document.getElementById('nextExercise').click();
+                }, 2000);
+            } else {
+                showFeedback('error', `Sai rồi! Đáp án đúng là "${currentAnswer}"`, 'exerciseFeedback');
+                
+                // Tăng số bài tập đã làm
+                practiceCount++;
+                updateProgress();
+                
+                // Focus lại vào input để người dùng thử lại
+                document.getElementById('exerciseInput').focus();
+                document.getElementById('exerciseInput').select();
+            }
+        }
+
+        // Tạo bài tập luyện nghe tiếng Việt
+        function generateVietnameseExercise() {
+            let exercise = '';
+            let answer = '';
+            
+            // Từ vựng tiếng Việt theo độ khó
+            const vietBasicWords = ['BA', 'ME', 'CHA', 'CON', 'ANH', 'EM', 'ONG', 'BA', 'TO', 'NHO'];
+            const vietMediumWords = ['NHÀ', 'CỬA', 'BÀN', 'GHẾ', 'SÁCH', 'VỞ', 'BÚT', 'MỰC', 'GIÀY', 'DÉP'];
+            const vietHardWords = ['XIN CHÀO', 'CẢM ƠN', 'TẠM BIỆT', 'HẸN GẶP', 'CHÚC MỪNG', 'THÀNH CÔNG', 'HẠNH PHÚC'];
+            const vietExpertPhrases = ['VIỆT NAM', 'HÀ NỘI', 'SÀI GÒN', 'ĐÀ NẴNG', 'HẢI PHÒNG', 'CẦN THƠ', 'QUẢNG NINH'];
+            const vietMasterPhrases = ['TỔ QUỐC VIỆT NAM', 'ĐỘC LẬP TỰ DO', 'BÁC HỒ KÍNH YÊU', 'DÂN TỘC VIỆT NAM', 'NON SÔNG VIỆT NAM'];
+            
+            if (currentDifficulty === 'viet-basic') {
+                // 1-3 ký tự tiếng Việt
+                const length = Math.floor(Math.random() * 3) + 1;
+                for (let i = 0; i < length; i++) {
+                    const randomChar = vietnameseAllLetters[Math.floor(Math.random() * vietnameseAllLetters.length)];
+                    exercise += randomChar + ' ';
+                    answer += randomChar;
+                }
+            } else if (currentDifficulty === 'viet-medium') {
+                // Từ đơn tiếng Việt
+                const randomWord = vietBasicWords[Math.floor(Math.random() * vietBasicWords.length)];
+                
+                for (let i = 0; i < randomWord.length; i++) {
+                    exercise += randomWord[i] + ' ';
+                }
+                answer = randomWord;
+            } else if (currentDifficulty === 'viet-hard') {
+                // Từ ghép tiếng Việt
+                const randomWord = vietMediumWords[Math.floor(Math.random() * vietMediumWords.length)];
+                
+                for (let i = 0; i < randomWord.length; i++) {
+                    exercise += randomWord[i] + ' ';
+                }
+                answer = randomWord;
+            } else if (currentDifficulty === 'viet-expert') {
+                // Câu ngắn tiếng Việt
+                const randomPhrase = vietHardWords[Math.floor(Math.random() * vietHardWords.length)];
+                
+                for (let i = 0; i < randomPhrase.length; i++) {
+                    const char = randomPhrase[i];
+                    exercise += char + (char !== ' ' ? ' ' : '');
+                }
+                answer = randomPhrase;
+            } else {
+                // Câu dài tiếng Việt
+                const randomPhrase = vietMasterPhrases[Math.floor(Math.random() * vietMasterPhrases.length)];
+                
+                for (let i = 0; i < randomPhrase.length; i++) {
+                    const char = randomPhrase[i];
+                    exercise += char + (char !== ' ' ? ' ' : '');
+                }
+                answer = randomPhrase;
+            }
+            
+            currentExercise = exercise.trim();
+            currentAnswer = answer;
+            
+            // Hiển thị mã Morse
+            let morseDisplay = '';
+            for (const char of currentExercise) {
+                if (char === ' ') {
+                    morseDisplay += '/ ';
+                } else {
+                    morseDisplay += morseCodeVietnamese[char] + ' ';
+                }
+            }
+            
+            document.getElementById('morseExerciseOutput').textContent = morseDisplay;
+            document.getElementById('exerciseInput').value = '';
+            document.getElementById('exerciseFeedback').innerHTML = '';
+        }
+
+        // Khởi tạo AI trợ lý tiếng Việt
+        function initAI() {
+            const sendBtn = document.getElementById('sendMessage');
+            const userInput = document.getElementById('userInput');
+            const chatMessages = document.getElementById('chatMessages');
+            const predefinedQuestions = document.querySelectorAll('.question-chip[data-question]');
+            
+            // Gửi tin nhắn
+            function sendMessage() {
+                const message = userInput.value.trim();
+                if (!message) return;
+                
+                // Thêm tin nhắn người dùng
+                addMessage(message, 'user');
+                userInput.value = '';
+                
+                // Hiển thị chỉ báo "AI đang trả lời"
+                const typingIndicator = document.createElement('div');
+                typingIndicator.className = 'message ai-message';
+                typingIndicator.id = 'typingIndicator';
+                typingIndicator.innerHTML = '<i class="fas fa-ellipsis-h"></i> AI ĐANG XỬ LÝ TIẾNG VIỆT...';
+                chatMessages.appendChild(typingIndicator);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                
+                // Xử lý và trả lời
+                setTimeout(() => {
+                    // Xóa chỉ báo đang gõ
+                    const indicator = document.getElementById('typingIndicator');
+                    if (indicator) indicator.remove();
+                    
+                    const response = getVietnameseAIResponse(message);
+                    addMessage(response, 'ai');
+                }, 800 + Math.random() * 800);
+                
+                // Focus lại vào input
+                userInput.focus();
+                lastFocusedElement = userInput;
+            }
+            
+            // Sự kiện nút gửi
+            sendBtn.addEventListener('click', sendMessage);
+            
+            // Sự kiện nhấn Enter
+            userInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+            
+            // Câu hỏi định sẵn tiếng Việt
+            predefinedQuestions.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const question = this.getAttribute('data-question');
+                    userInput.value = question;
+                    sendMessage();
+                });
+            });
+        }
+
+        // Phản hồi AI tiếng Việt
+        function getVietnameseAIResponse(message) {
+            const lowerMsg = message.toLowerCase();
+            
+            // Kiểm tra các từ khóa và trả lời phù hợp
+            if (lowerMsg.includes('mã morse tiếng việt là gì') || lowerMsg.includes('morse code tiếng việt')) {
+                return "Mã Morse tiếng Việt là hệ thống mã hóa các ký tự tiếng Việt thành các tín hiệu điện báo gồm chấm (.) và gạch (-). Nó dựa trên mã Morse quốc tế nhưng có bổ sung các ký tự đặc biệt của tiếng Việt như Ă, Â, Đ, Ê, Ô, Ơ, Ư.\n\nMã Morse tiếng Việt được sử dụng trong liên lạc vô tuyến tại Việt Nam và để truyền thông tin bằng tiếng Việt qua các phương tiện điện báo.";
+            
+            } else if (lowerMsg.includes('ký tự đặc biệt tiếng việt') || lowerMsg.includes('chữ cái đặc biệt việt')) {
+                return "**Các ký tự đặc biệt tiếng Việt trong mã Morse:**\n\n" +
+                       "• **Ă (.-.-)**: A với móc, phát âm như 'ă'\n" +
+                       "• **Â (.--.-)**: A với mũ, phát âm như 'â'\n" +
+                       "• **Đ (-..-.)**: D với gạch ngang, phát âm như 'đ'\n" +
+                       "• **Ê (-.-..)**: E với mũ, phát âm như 'ê'\n" +
+                       "• **Ô (---.)**: O với mũ, phát âm như 'ô'\n" +
+                       "• **Ơ (.--.)**: O với móc, phát âm như 'ơ'\n" +
+                       "• **Ư (..--)**: U với móc, phát âm như 'ư'\n\n" +
+                       "Các ký tự này có mã Morse riêng để phân biệt với các ký tự cơ bản trong bảng chữ cái quốc tế.";
+            
+            } else if (lowerMsg.includes('bài tập') || lowerMsg.includes('luyện nghe')) {
+                // Tạo bài tập tiếng Việt theo yêu cầu
+                const match = message.match(/\d+/);
+                const count = match ? parseInt(match[0]) : 5;
+                let exercise = '';
+                let answer = '';
+                
+                for (let i = 0; i < Math.min(count, 15); i++) {
+                    const randomChar = vietnameseAllLetters[Math.floor(Math.random() * vietnameseAllLetters.length)];
+                    exercise += randomChar + ' ';
+                    answer += randomChar;
+                }
+                
+                currentExercise = exercise.trim();
+                currentAnswer = answer;
+                
+                // Chuyển sang tab practice và phát âm thanh
+                setTimeout(() => {
+                    const practiceTab = document.querySelector('.nav-tab[data-tab="practice"]');
+                    if (practiceTab) {
+                        practiceTab.click();
+                        
+                        // Phát âm thanh bài tập sau khi chuyển tab
+                        setTimeout(() => {
+                            playMorseSequence(currentExercise, playSpeed);
+                            animateVisualizer('exerciseVisualizer');
+                            
+                            // Focus vào input bài tập
+                            document.getElementById('exerciseInput').focus();
+                            lastFocusedElement = document.getElementById('exerciseInput');
+                        }, 500);
+                    }
+                }, 300);
+                
+                return `Tôi đã tạo bài tập ${count} ký tự tiếng Việt cho bạn: "${exercise.trim()}". Tôi đã chuyển bạn sang tab "Luyện Nghe" và sẽ phát âm thanh của bài tập này. Hãy lắng nghe và nhập câu trả lời vào ô bên dưới.`;
+            
+            } else if (lowerMsg.includes('mẹo học') || lowerMsg.includes('học nhanh') || lowerMsg.includes('cách học')) {
+                return "**Mẹo học mã Morse tiếng Việt hiệu quả:**\n\n" +
+                       "1. **Học theo nhóm**: Bắt đầu với các ký tự cơ bản (A, B, C...) rồi đến ký tự đặc biệt (Ă, Â, Đ...)\n" +
+                       "2. **Tập trung vào ký tự đặc biệt**: Dành nhiều thời gian cho các ký tự đặc biệt tiếng Việt vì chúng khác biệt so với quốc tế\n" +
+                       "3. **Luyện nghe hàng ngày**: Dành 10-15 phút mỗi ngày để luyện nghe và giải mã\n" +
+                       "4. **Học từ có nghĩa**: Bắt đầu với các từ tiếng Việt đơn giản (BA, MẸ, NHÀ...)\n" +
+                       "5. **Sử dụng ứng dụng**: Ứng dụng Cyber Morse Việt giúp bạn luyện tập mọi lúc, mọi nơi\n" +
+                       "6. **Ghi nhớ bằng âm thanh**: Tạo các cụm từ gợi nhớ cho mã Morse tiếng Việt";
+            
+            } else if (lowerMsg.includes('khác biệt') || lowerMsg.includes('so sánh')) {
+                return "**Sự khác biệt giữa mã Morse quốc tế và tiếng Việt:**\n\n" +
+                       "1. **Bổ sung ký tự đặc biệt**: Morse tiếng Việt có thêm 7 ký tự đặc biệt (Ă, Â, Đ, Ê, Ô, Ơ, Ư)\n" +
+                       "2. **Mã riêng cho ký tự đặc biệt**: Mỗi ký tự đặc biệt có mã Morse riêng, không giống với ký tự gốc\n" +
+                       "3. **Ứng dụng thực tế**: Morse tiếng Việt được sử dụng trong liên lạc nội địa tại Việt Nam\n" +
+                       "4. **Phát âm**: Khi phát âm thanh, các ký tự đặc biệt được phát như ký tự gốc kết hợp với mã đặc biệt\n" +
+                       "5. **Từ vựng**: Bài tập và ví dụ tập trung vào từ vựng tiếng Việt thông dụng";
+            
+            } else if (lowerMsg.includes('lịch sử') || lowerMsg.includes('việt nam')) {
+                return "**Lịch sử mã Morse tại Việt Nam:**\n\n" +
+                       "• **Thế kỷ 19**: Mã Morse được giới thiệu tại Việt Nam cùng với hệ thống điện báo thuộc địa\n" +
+                       "• **Thời kỳ chiến tranh**: Mã Morse được sử dụng rộng rãi trong liên lạc quân sự và kháng chiến\n" +
+                       "• **Sau 1975**: Morse tiếp tục được sử dụng trong liên lạc hàng hải, hàng không và vô tuyến nghiệp dư\n" +
+                       "• **Hiện nay**: Vẫn được sử dụng như một phương tiện liên lạc dự phòng và trong đào tạo\n" +
+                       "• **Phát triển**: Hệ thống mã Morse tiếng Việt được chuẩn hóa để hỗ trợ đầy đủ các ký tự tiếng Việt";
+            
+            } else {
+                // Phản hồi mặc định với thông tin hữu ích
+                const responses = [
+                    "Tôi có thể giúp bạn học mã Morse tiếng Việt. Hãy hỏi tôi về bảng mã Morse tiếng Việt, lịch sử, cách học, hoặc yêu cầu tôi tạo bài tập cho bạn.",
+                    "Bạn muốn biết điều gì về mã Morse tiếng Việt? Tôi có thể giải thích các ký tự đặc biệt, giúp bạn luyện nghe, hoặc kể về lịch sử mã Morse tại Việt Nam.",
+                    "Để học mã Morse tiếng Việt hiệu quả, hãy bắt đầu với các ký tự cơ bản như A (.-), B (-...), C (-.-.), và các ký tự đặc biệt như Ă (.-.-), Â (.--.-), Đ (-..-.).",
+                    "Bạn có biết mã Morse tiếng Việt vẫn được sử dụng trong nhiều lĩnh vực tại Việt Nam như hàng hải, hàng không, và hoạt động vô tuyến nghiệp dư?",
+                    "Thử yêu cầu tôi 'Tạo bài tập luyện nghe 5 ký tự tiếng Việt' để bắt đầu luyện tập mã Morse tiếng Việt ngay hôm nay!"
+                ];
+                
+                return responses[Math.floor(Math.random() * responses.length)];
+            }
+        }
+
+        // Thêm tin nhắn vào chat
+        function addMessage(text, sender) {
+            const chatMessages = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}-message`;
+            
+            // Format text with line breaks
+            const formattedText = text.replace(/\n/g, '<br>');
+            messageDiv.innerHTML = formattedText;
+            
+            chatMessages.appendChild(messageDiv);
+            
+            // Cuộn xuống tin nhắn mới nhất
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Cập nhật tiến trình học tiếng Việt
+        function updateProgress() {
+            // Tính số ký tự tiếng Việt đã học
+            const learnedVietnameseChars = Array.from(learnedChars).filter(char => 
+                vietnameseAllLetters.includes(char)
+            ).length;
+            
+            // Cập nhật thanh tiến độ
+            const totalVietnameseChars = vietnameseAllLetters.length;
+            const progressPercent = (learnedVietnameseChars / totalVietnameseChars) * 100;
+            document.getElementById('progressFill').style.width = `${progressPercent}%`;
+            document.getElementById('learnedCount').textContent = learnedVietnameseChars;
+            document.getElementById('vietCharsMastered').textContent = learnedVietnameseChars;
+            
+            // Cập nhật thống kê
+            document.getElementById('totalPracticeCount').textContent = practiceCount;
+            document.getElementById('practiceCount').textContent = practiceCount;
+            
+            const accuracy = practiceCount > 0 ? Math.round((correctCount / practiceCount) * 100) : 0;
+            document.getElementById('overallAccuracy').textContent = `${accuracy}%`;
+            document.getElementById('accuracyRate').textContent = `${accuracy}%`;
+            
+            // Cập nhật streak (ngẫu nhiên cho demo)
+            const streak = 3;
+            document.getElementById('streakDays').textContent = streak;
+            
+            // Cập nhật thời gian học (ngẫu nhiên cho demo)
+            const timeSpent = 32;
+            const totalTime = 96;
+            document.getElementById('timeSpent').textContent = timeSpent;
+            document.getElementById('totalTime').textContent = totalTime;
+            
+            // Hiển thị ký tự tiếng Việt đã học
+            const masteredContainer = document.getElementById('masteredChars');
+            masteredContainer.innerHTML = '';
+            
+            const learnedVietnameseArray = Array.from(learnedChars)
+                .filter(char => vietnameseAllLetters.includes(char))
+                .sort();
+            
+            learnedVietnameseArray.forEach(char => {
+                if (morseCodeVietnamese[char]) {
+                    const isSpecial = vietnameseSpecial.includes(char);
+                    const charClass = isSpecial ? 'vietnamese-char' : '';
+                    
+                    const card = document.createElement('div');
+                    card.className = 'morse-card learned';
+                    card.innerHTML = `
+                        <div class="morse-char ${charClass}">${char}</div>
+                        <div class="morse-code">${morseCodeVietnamese[char]}</div>
+                    `;
+                    masteredContainer.appendChild(card);
+                }
+            });
+            
+            // Lưu vào localStorage (trong thực tế)
+            try {
+                const progressData = {
+                    learnedChars: Array.from(learnedChars),
+                    practiceCount: practiceCount,
+                    correctCount: correctCount,
+                    lastUpdated: new Date().toISOString()
+                };
+                localStorage.setItem('cyberMorseVietProgress', JSON.stringify(progressData));
+            } catch (e) {
+                console.log('Không thể lưu tiến trình vào localStorage');
+            }
+        }
+
+        // Hiển thị phản hồi
+        function showFeedback(type, message, elementId = null) {
+            const feedbackDiv = elementId ? document.getElementById(elementId) : document.getElementById('guessFeedback');
+            if (!feedbackDiv) return;
+            
+            feedbackDiv.className = `feedback feedback-${type}`;
+            feedbackDiv.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i> ${message}`;
+            
+            // Tự động ẩn phản hồi sau 5 giây (trừ khi là lỗi)
+            if (type !== 'error') {
+                setTimeout(() => {
+                    if (feedbackDiv.innerHTML.includes(message)) {
+                        feedbackDiv.innerHTML = '';
+                        feedbackDiv.className = '';
+                    }
+                }, 5000);
+            }
+        }
+
+        // Phát âm thanh mã Morse cho một ký tự tiếng Việt
+        function playMorseChar(char, speed = 1.0) {
+            if (!audioContext) {
+                showFeedback('error', 'Trình duyệt của bạn không hỗ trợ âm thanh. Vui lòng thử trên trình duyệt khác.');
+                return;
+            }
+            
+            const code = morseCodeVietnamese[char];
+            if (!code) return;
+            
+            // Dừng các âm thanh đang phát trước đó
+            masterNodes.forEach(node => {
+                if (node) node.stop();
+            });
+            masterNodes = [];
+            
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.value = 750; // Tần số âm thanh cao hơn cho cyberpunk
+            oscillator.type = 'sawtooth'; // Dạng sóng sawtooth cho âm thanh điện tử
+            
+            let currentTime = audioContext.currentTime;
+            const unitTime = 0.2 / speed; // Điều chỉnh thời gian theo tốc độ
+            
+            for (const symbol of code) {
+                // Phát âm thanh cho chấm hoặc gạch
+                if (symbol === '.') {
+                    // Chấm: âm thanh ngắn (1 đơn vị)
+                    gainNode.gain.setValueAtTime(0, currentTime);
+                    gainNode.gain.linearRampToValueAtTime(0.7, currentTime + 0.01);
+                    gainNode.gain.setValueAtTime(0.7, currentTime + 0.09 / speed);
+                    gainNode.gain.linearRampToValueAtTime(0, currentTime + 0.1 / speed);
+                    currentTime += unitTime; // Thời gian chờ giữa các ký hiệu (1 đơn vị)
+                } else if (symbol === '-') {
+                    // Gạch: âm thanh dài (3 đơn vị)
+                    gainNode.gain.setValueAtTime(0, currentTime);
+                    gainNode.gain.linearRampToValueAtTime(0.7, currentTime + 0.01);
+                    gainNode.gain.setValueAtTime(0.7, currentTime + 0.29 / speed);
+                    gainNode.gain.linearRampToValueAtTime(0, currentTime + 0.3 / speed);
+                    currentTime += unitTime; // Thời gian chờ giữa các ký hiệu (1 đơn vị)
+                }
+            }
+            
+            oscillator.start();
+            oscillator.stop(currentTime + 0.1);
+            
+            masterNodes.push(oscillator);
+        }
+
+        // Phát âm thanh cho một chuỗi mã Morse tiếng Việt
+        function playMorseSequence(text, speed = 1.0) {
+            if (!audioContext) {
+                showFeedback('error', 'Trình duyệt của bạn không hỗ trợ âm thanh. Vui lòng thử trên trình duyệt khác.');
+                return;
+            }
+            
+            // Dừng các âm thanh đang phát trước đó
+            masterNodes.forEach(node => {
+                if (node) node.stop();
+            });
+            masterNodes = [];
+            
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.value = 750;
+            oscillator.type = 'sawtooth';
+            
+            let currentTime = audioContext.currentTime;
+            const unitTime = 0.2 / speed;
+            const wordSpaceTime = 0.7 / speed;
+            const charSpaceTime = 0.3 / speed;
+            
+            for (const char of text.toUpperCase()) {
+                if (char === ' ') {
+                    // Khoảng cách giữa các từ (7 đơn vị)
+                    currentTime += wordSpaceTime;
+                    continue;
+                }
+                
+                const code = morseCodeVietnamese[char];
+                if (!code) continue;
+                
+                for (const symbol of code) {
+                    // Phát âm thanh cho chấm hoặc gạch
+                    if (symbol === '.') {
+                        gainNode.gain.setValueAtTime(0, currentTime);
+                        gainNode.gain.linearRampToValueAtTime(0.7, currentTime + 0.01);
+                        gainNode.gain.setValueAtTime(0.7, currentTime + 0.09 / speed);
+                        gainNode.gain.linearRampToValueAtTime(0, currentTime + 0.1 / speed);
+                        currentTime += unitTime;
+                    } else if (symbol === '-') {
+                        gainNode.gain.setValueAtTime(0, currentTime);
+                        gainNode.gain.linearRampToValueAtTime(0.7, currentTime + 0.01);
+                        gainNode.gain.setValueAtTime(0.7, currentTime + 0.29 / speed);
+                        gainNode.gain.linearRampToValueAtTime(0, currentTime + 0.3 / speed);
+                        currentTime += unitTime;
+                    } else if (symbol === '/') {
+                        // Khoảng cách giữa các từ
+                        currentTime += wordSpaceTime;
+                    }
+                }
+                
+                // Khoảng cách giữa các ký tự (3 đơn vị)
+                currentTime += charSpaceTime;
+            }
+            
+            oscillator.start();
+            oscillator.stop(currentTime + 0.1);
+            
+            masterNodes.push(oscillator);
+        }
+
+        // Hiệu ứng hình ảnh cho âm thanh
+        function animateVisualizer(visualizerId) {
+            const visualizer = document.getElementById(visualizerId);
+            const bars = visualizer.querySelectorAll('.sound-bar');
+            
+            bars.forEach(bar => {
+                bar.style.animation = 'none';
+                void bar.offsetWidth; // Trigger reflow
+                bar.style.animation = 'soundWave 0.8s infinite ease-in-out';
+            });
+            
+            // Dừng hiệu ứng sau 3 giây
+            setTimeout(() => {
+                bars.forEach(bar => {
+                    bar.style.animation = 'none';
+                });
+            }, 3000);
+        }
+
+        // Hàm cuộn mượt đến phần tử
+        function smoothScrollToElement(elementId) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
+                });
+            }
+        }
+
+        // Khôi phục focus khi quay lại tab
+        window.addEventListener('focus', function() {
+            if (lastFocusedElement && lastFocusedElement.tagName) {
+                setTimeout(() => {
+                    lastFocusedElement.focus();
+                    
+                    // Nếu là input, chọn toàn bộ nội dung
+                    if (lastFocusedElement.tagName === 'INPUT' || lastFocusedElement.tagName === 'TEXTAREA') {
+                        lastFocusedElement.select();
+                    }
+                }, 100);
+            }
+        });
+
+        // Xử lý phím tắt toàn cục
+        document.addEventListener('keydown', function(e) {
+            // Ctrl/Cmd + 1-5 để chuyển tab
+            if ((e.ctrlKey || e.metaKey) && e.key >= '1' && e.key <= '5') {
+                const tabIndex = parseInt(e.key) - 1;
+                const tabs = document.querySelectorAll('.nav-tab');
+                if (tabs[tabIndex]) {
+                    e.preventDefault();
+                    tabs[tabIndex].click();
+                }
+            }
+            
+            // Space để phát lại âm thanh hiện tại
+            if (e.code === 'Space' && !(e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) {
+                e.preventDefault();
+                
+                if (currentTab === 'learn') {
+                    document.getElementById('playRandomChar').click();
+                } else if (currentTab === 'practice') {
+                    document.getElementById('playExercise').click();
+                } else if (currentTab === 'converter') {
+                    document.getElementById('playTextMorse').click();
+                }
+            }
+            
+            // Esc để clear input
+            if (e.code === 'Escape') {
+                if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+                    e.target.value = '';
+                    e.target.focus();
+                }
+            }
+        });
+
+        // Kiểm tra và tải tiến trình từ localStorage
+        function loadProgressFromStorage() {
+            try {
+                const savedProgress = localStorage.getItem('cyberMorseVietProgress');
+                if (savedProgress) {
+                    const progressData = JSON.parse(savedProgress);
+                    learnedChars = new Set(progressData.learnedChars || []);
+                    practiceCount = progressData.practiceCount || 0;
+                    correctCount = progressData.correctCount || 0;
+                    updateProgress();
+                    initMorseCharts();
+                }
+            } catch (e) {
+                console.log('Không thể tải tiến trình từ localStorage');
+            }
+        }
+
+        // Tải tiến trình khi trang được tải
+        loadProgressFromStorage();
+    </script>
+</body>
+</html>
